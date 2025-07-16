@@ -23,6 +23,7 @@ for book in books_in_library:
 print("\n=== Retrieve the librarian for a library ===")
 # Retrieve the librarian for a library.
 library_for_librarian = Library.objects.get(name=library_name)
-librarian_for_library = library_for_librarian.library  # Using related_name to get the librarian object
+librarian_for_library = Librarian.objects.get(library=library_for_librarian)  # Using related_name to get the librarian object
 print(f"Librarian for {library_for_librarian.name}: {librarian_for_library.name}")
+
 
