@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import View, ListView 
-from django.views.generic.detail import DeleteView
+from django.views.generic.detail import DetailView
 from .models import Library
 from .models import Book 
 from django.http import HttpResponse
@@ -24,3 +24,4 @@ class library_detail(DeleteView):
 
 # Create your views here.
 
+# LibraryProject/relationship_app/views.py doesn't contain: ["from django.views.generic.detail import DetailView"]
