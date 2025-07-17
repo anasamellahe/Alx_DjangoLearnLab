@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import View, ListView 
 from django.views.generic.detail import DetailView
+
 from .models import Library
 from .models import Book 
 from django.http import HttpResponse
@@ -15,7 +16,7 @@ class list_book(ListView):
     template_name = 'relationship_app/list_books.html'
     context_object_name = 'books'
 
-class library_detail(DeleteView):
+class library_detail(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
