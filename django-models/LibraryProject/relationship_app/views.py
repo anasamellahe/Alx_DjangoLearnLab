@@ -1,7 +1,12 @@
 from django.shortcuts import render
 from django.views.generic import View, ListView, DeleteView
 from .models import Book, Library
+from django.http import HttpResponse
 
+
+
+def list_books(request):
+    return render(request, 'relationship_app/list_books.html', {'books':Book.objects.all()})
 
 class list_book(ListView):
     model = Book
