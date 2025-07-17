@@ -23,3 +23,4 @@ class library_detail(DeleteView):
     slug_url_kwarg = 'title'
 
 # Create your views here.
+
