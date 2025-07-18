@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import View, ListView 
 from django.views.generic.detail import DetailView
-
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib import messages
 from .models import Library
 from .models import Book 
 from django.http import HttpResponse
@@ -23,6 +26,46 @@ class LibraryDetailView(DetailView):
     slug_field = 'name'
     slug_url_kwarg = 'title'
 
-# Create your views here.
 
-# LibraryProject/relationship_app/views.py doesn't contain: ["from django.views.generic.detail import DetailView"]
+
+def  loginAuth(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request , data=request.POST)
+        if (form.is_valid()):
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return HttpResponse("hello user")
+            else:
+                return HttpResponse("invalid user")
+        else:
+            return HttpResponse("invalid form")
+    else:
+        form = AuthenticationForm()
+        return render(request, 'relationship_app/login.html', {'form': form})
+
+def logoutAuth(request):
+    if request.method == 'POST':
+        logout(request)
+        return render(request, 'relationship_app/logout.html', {})
+    else:
+        return render(request, 'relationship_app/logout.html', {})
+
+
+def registerAuth(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            login(request, user)
+            messages.success(request, f'Account created successfully for {username}!')
+            return HttpResponse('Account created successfully for')  # Redirect to a success page
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = UserCreationForm()
+    
+    return render(request, 'relationship_app/register.html', {'form': form})
