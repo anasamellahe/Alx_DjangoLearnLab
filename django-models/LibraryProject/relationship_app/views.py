@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View, ListView 
 from django.views.generic.detail import DetailView
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate
+from django.contrib.auth import login
+from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
@@ -69,3 +71,8 @@ def registerAuth(request):
         form = UserCreationForm()
     
     return render(request, 'relationship_app/register.html', {'form': form})
+
+
+
+
+# LibraryProject/relationship_app/views.py doesn't contain: ["from django.contrib.auth import login", "from django.contrib.auth.forms import UserCreationForm"]
