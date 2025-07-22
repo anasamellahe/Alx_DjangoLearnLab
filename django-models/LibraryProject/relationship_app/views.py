@@ -1,21 +1,16 @@
-from django.shortcuts import render
-from django.views.generic import View, ListView,  CreateView
+from django.shortcuts import render, redirect
+from django.views.generic import View, ListView
 from django.views.generic.detail import DetailView
-from django.contrib.auth import logout
+from django.contrib.auth import login
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.views import LoginView
+from django.contrib import messages
 from .models import Library
 from .models import Book 
 from django.http import HttpResponse
-from django.contrib.auth import login
-
-
-
 
 def list_books(request):
-    return render(request, 'relationship_app/list_books.html', {'books':Book.objects.all()})
+    return render(request, 'relationship_app/list_books.html', {'books': Book.objects.all()})
 
 class list_book(ListView):
     model = Book
@@ -29,30 +24,23 @@ class LibraryDetailView(DetailView):
     slug_field = 'name'
     slug_url_kwarg = 'title'
 
-
-class loginAuth(LoginView):
-    form_class = AuthenticationForm
+# Function-based register view (replaces registerAuth class)
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            login(request, user)
+            messages.success(request, f'Account created successfully for {username}!')
+            return redirect('book_list')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = UserCreationForm()
     
-    def form_valid(self, form):
-        return HttpResponse("user success fully loge-in")
+    return render(request, 'relationship_app/register.html', {'form': form})
 
-class  registerAuth(CreateView):
-    model = User
-    form_class = UserCreationForm
-    success_url = '/auth/login'
-
-    
-
-class logoutAuth(View):
-
-    def get(self, request):
-        print("hello in logout get")
-        return render(request, 'relationship_app/logout.html', {})
-    def post(self, request):
-        print("hello in logout post");
-        logout(request)
-        return render(request, 'relationship_app/logout.html', {})
-  
 
 
 
