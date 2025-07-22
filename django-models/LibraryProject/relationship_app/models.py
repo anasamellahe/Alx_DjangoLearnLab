@@ -25,6 +25,9 @@ class Librarian(models.Model):
         return self.name
 # Create your models here.
 
+# class UserProfile(models.Model):
+#     user =  models.OneToOneField(user)
+#     role = models.CharField(choices = ('Admin', 'Librarian', 'Member',))
 
 
 
