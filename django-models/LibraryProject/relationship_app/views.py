@@ -30,8 +30,13 @@ class LibraryDetailView(DetailView):
 
 
 
-def  loginAuth(request):
-    if request.method == 'POST':
+class  loginAuth(View):
+
+    def get(self, request):
+        form = AuthenticationForm()
+        return render(request, 'relationship_app/login.html', {'form': form})
+    
+    def post(self, request):
         form = AuthenticationForm(request , data=request.POST)
         if (form.is_valid()):
             username = form.cleaned_data.get('username')
@@ -44,20 +49,24 @@ def  loginAuth(request):
                 return HttpResponse("invalid user")
         else:
             return HttpResponse("invalid form")
-    else:
-        form = AuthenticationForm()
-        return render(request, 'relationship_app/login.html', {'form': form})
 
-def logoutAuth(request):
-    if request.method == 'POST':
+class logoutAuth(View):
+
+    def get(self, request):
+        return render(request, 'relationship_app/logout.html', {})
+    def post(self, request):
         logout(request)
         return render(request, 'relationship_app/logout.html', {})
-    else:
-        return render(request, 'relationship_app/logout.html', {})
+  
 
 
-def registerAuth(request):
-    if request.method == 'POST':
+class  registerAuth(View):
+
+    def get(self, request):
+        form = UserCreationForm()
+        return render(request, 'relationship_app/register.html', {'form': form})
+    
+    def post(self, request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
@@ -67,12 +76,6 @@ def registerAuth(request):
             return HttpResponse('Account created successfully for')  # Redirect to a success page
         else:
             messages.error(request, 'Please correct the errors below.')
-    else:
-        form = UserCreationForm()
-    
-    return render(request, 'relationship_app/register.html', {'form': form})
+            return render(request, 'relationship_app/register.html', {'form': form})
 
 
-
-
-# LibraryProject/relationship_app/views.py doesn't contain: ["from django.contrib.auth import login", "from django.contrib.auth.forms import UserCreationForm"]
