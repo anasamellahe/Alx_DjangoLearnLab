@@ -42,12 +42,13 @@
 #     return render(request, 'relationship_app/register.html', {'form': form})
 
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, permission_required
 from django.views.generic.detail import DetailView
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import Book, Library
 
 # Existing views
@@ -101,7 +102,9 @@ def admin_view(request):
     context = {
         'user': request.user,
         'role': request.user.profile.role,
-        'message': 'Welcome to the Admin Dashboard!'
+        'message': 'Welcome to the Admin Dashboard!',
+        'total_books': Book.objects.count(),
+        'total_users': User.objects.count(),
     }
     return render(request, 'relationship_app/admin_view.html', context)
 
@@ -112,7 +115,8 @@ def librarian_view(request):
         'user': request.user,
         'role': request.user.profile.role,
         'message': 'Welcome to the Librarian Dashboard!',
-        'books': Book.objects.all()
+        'books': Book.objects.all(),
+        'libraries': Library.objects.all(),
     }
     return render(request, 'relationship_app/librarian_view.html', context)
 
@@ -123,47 +127,57 @@ def member_view(request):
         'user': request.user,
         'role': request.user.profile.role,
         'message': 'Welcome to the Member Dashboard!',
-        'books': Book.objects.all()[:5]  # Show only 5 books for members
+        'books': Book.objects.all()[:10],  # Show only 10 books for members
     }
     return render(request, 'relationship_app/member_view.html', context)
 
-
-# class  loginAuth(View):
-
-#     def get(self, request):
-#         form = AuthenticationForm()
-#         return render(request, 'relationship_app/login.html', {'form': form})
+# Permission-based book management views
+@permission_required('relationship_app.can_add_book', login_url='/login/')
+def add_book(request):
+    """Add a new book - requires can_add_book permission"""
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        author = request.POST.get('author')
+        publication_year = request.POST.get('publication_year')
+        
+        if title and author:
+            Book.objects.create(
+                title=title,
+                author=author,
+                publication_year=publication_year or None
+            )
+            messages.success(request, f'Book "{title}" added successfully!')
+            return redirect('book_list')
+        else:
+            messages.error(request, 'Please fill in all required fields.')
     
-#     def post(self, request):
-#         form = AuthenticationForm(request , data=request.POST)
-#         if (form.is_valid()):
-#             username = form.cleaned_data.get('username')
-#             password = form.cleaned_data.get('password')
-#             user = authenticate(username=username, password=password)
-#             if user is not None:
-#                 login(request, user)
-#                 return HttpResponse("hello user")
-#             else:
-#                 return HttpResponse("invalid user")
-#         else:
-#             return HttpResponse("invalid form")
+    return render(request, 'relationship_app/add_book.html')
 
-
-
-# class  registerAuth(View):
-
-#     def get(self, request):
-#         form = UserCreationForm()
-#         return render(request, 'relationship_app/register.html', {'form': form})
+@permission_required('relationship_app.can_change_book', login_url='/login/')
+def edit_book(request, book_id):
+    """Edit an existing book - requires can_change_book permission"""
+    book = get_object_or_404(Book, id=book_id)
     
-#     def post(self, request):
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             username = form.cleaned_data.get('username')
-#             login(request, user)
-#             messages.success(request, f'Account created successfully for {username}!')
-#             return HttpResponse('Account created successfully for')  # Redirect to a success page
-#         else:
-#             messages.error(request, 'Please correct the errors below.')
-#             return render(request, 'relationship_app/register.html', {'form': form})
+    if request.method == 'POST':
+        book.title = request.POST.get('title', book.title)
+        book.author = request.POST.get('author', book.author)
+        book.publication_year = request.POST.get('publication_year') or book.publication_year
+        book.save()
+        
+        messages.success(request, f'Book "{book.title}" updated successfully!')
+        return redirect('book_list')
+    
+    return render(request, 'relationship_app/edit_book.html', {'book': book})
+
+@permission_required('relationship_app.can_delete_book', login_url='/login/')
+def delete_book(request, book_id):
+    """Delete a book - requires can_delete_book permission"""
+    book = get_object_or_404(Book, id=book_id)
+    
+    if request.method == 'POST':
+        book_title = book.title
+        book.delete()
+        messages.success(request, f'Book "{book_title}" deleted successfully!')
+        return redirect('book_list')
+    
+    return render(request, 'relationship_app/delete_book.html', {'book': book})

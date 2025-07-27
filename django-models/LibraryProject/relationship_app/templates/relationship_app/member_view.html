@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .dashboard { background-color: #e3f2fd; padding: 20px; border-radius: 8px; }
+        .book-list { margin: 20px 0; }
+        .book-item { background: white; padding: 10px; margin: 5px 0; border-radius: 5px; }
+        .nav-links a { margin-right: 15px; color: #2196f3; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>{{ message }}</h1>
+        <p>Hello, <strong>{{ user.username }}</strong>! You are logged in as: <strong>{{ role }}</strong></p>
+        
+        <div class="nav-links">
+            <h3>Member Functions:</h3>
+            <a href="{% url 'book_list' %}">Browse Books</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+        
+        <div class="book-list">
+            <h3>Available Books (showing latest 10):</h3>
+            {% for book in books %}
+                <div class="book-item">
+                    <strong>{{ book.title }}</strong> by {{ book.author.name }}
+                </div>
+            {% empty %}
+                <p>No books available.</p>
+            {% endfor %}
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <p><em>As a Member, you can browse and view available books in the library.</em></p>
+        </div>
+    </div>
+</body>
+</html>

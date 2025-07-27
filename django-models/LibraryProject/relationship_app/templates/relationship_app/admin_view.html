@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .dashboard { background-color: #f8f9fa; padding: 20px; border-radius: 8px; }
+        .stats { display: flex; gap: 20px; margin: 20px 0; }
+        .stat-card { background: white; padding: 15px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .nav-links a { margin-right: 15px; color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>{{ message }}</h1>
+        <p>Hello, <strong>{{ user.username }}</strong>! You are logged in as: <strong>{{ role }}</strong></p>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Total Books</h3>
+                <p>{{ total_books }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <p>{{ total_users }}</p>
+            </div>
+        </div>
+        
+        <div class="nav-links">
+            <h3>Admin Functions:</h3>
+            <a href="{% url 'book_list' %}">View All Books</a>
+            <a href="/admin/">Django Admin</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <p><em>As an Admin, you have full access to all system functions including user management and system configuration.</em></p>
+        </div>
+    </div>
+</body>
+</html>
