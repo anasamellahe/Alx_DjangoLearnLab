@@ -31,7 +31,19 @@ urlpatterns = [
     path('librarian/', views.librarian_view, name='librarian_view'),
     path('member/', views.member_view, name='member_view'),
     
+    # Book management URLs with permissions
+    path('add_book/', views.add_book, name='add_book'),
+    path('edit_book/<int:book_id>/', views.edit_book, name='edit_book'),
+    path('delete_book/<int:book_id>/', views.delete_book, name='delete_book'),
+    
     # Book management URLs
     path('books/', views.list_books, name='book_list'),
     path('library/<str:title>/', views.LibraryDetailView.as_view(), name='library_detail'),
 ]
+# add_book/
+
+# delete_book/
+
+# edit_book/
+
+
