@@ -45,7 +45,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import user_passes_test, login_required, permission_required
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import User
 from django.views.generic.detail import DetailView
 from django.contrib import messages
@@ -181,5 +182,4 @@ def delete_book(request, book_id):
         return redirect('book_list')
     
     return render(request, 'relationship_app/delete_book.html', {'book': book})
-    
     return render(request, 'relationship_app/delete_book.html', {'book': book})
