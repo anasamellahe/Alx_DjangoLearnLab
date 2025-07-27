@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Library, Librarian, Book, Author
+from .models import Library, Librarian, Book, Author, UserProfile
 
 
 class AuthorAdmin(admin.ModelAdmin):
@@ -32,9 +32,12 @@ class LibrarianAdmin(admin.ModelAdmin):
         return obj.Library.name if obj.Library else 'No Library'
     get_library_name.short_description = 'Library'
 
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('role',)
 
 
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Book, BookAdmin)
 admin.site.register(Library, LibraryAdmin)
 admin.site.register(Librarian, LibrarianAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)

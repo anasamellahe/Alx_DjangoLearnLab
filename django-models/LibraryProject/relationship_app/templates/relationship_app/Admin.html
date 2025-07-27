@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .dashboard { background-color: #f8f9fa; padding: 20px; border-radius: 5px; }
+        .header { color: #dc3545; }
+        .nav { margin: 20px 0; }
+        .nav a { margin-right: 15px; color: #007bff; text-decoration: none; }
+        .nav a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1 class="header">Admin Dashboard</h1>
+        <p><strong>Welcome, {{ user.username }}!</strong></p>
+        <p>Role: <span style="color: #dc3545;">{{ role }}</span></p>
+        <p>{{ message }}</p>
+        
+        <div class="nav">
+            <h3>Admin Actions:</h3>
+            <a href="{% url 'admin:index' %}">Django Admin</a>
+            <a href="{% url 'book_list' %}">View All Books</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+        
+        <div>
+            <h3>System Overview:</h3>
+            <p>As an admin, you have full access to:</p>
+            <ul>
+                <li>User Management</li>
+                <li>Book Management</li>
+                <li>Library Management</li>
+                <li>System Configuration</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Librarian Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .dashboard { background-color: #f8f9fa; padding: 20px; border-radius: 5px; }
+        .header { color: #28a745; }
+        .nav { margin: 20px 0; }
+        .nav a { margin-right: 15px; color: #007bff; text-decoration: none; }
+        .nav a:hover { text-decoration: underline; }
+        .books-list { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1 class="header">Librarian Dashboard</h1>
+        <p><strong>Welcome, {{ user.username }}!</strong></p>
+        <p>Role: <span style="color: #28a745;">{{ role }}</span></p>
+        <p>{{ message }}</p>
+        
+        <div class="nav">
+            <h3>Librarian Actions:</h3>
+            <a href="{% url 'book_list' %}">Manage Books</a>
+            <a href="{% url 'member_view' %}">View Member Area</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+        
+        <div class="books-list">
+            <h3>Library Books Management:</h3>
+            <p>As a librarian, you can:</p>
+            <ul>
+                <li>Add new books to the library</li>
+                <li>Update book information</li>
+                <li>Manage book loans</li>
+                <li>Help members find resources</li>
+            </ul>
+            
+            {% if books %}
+                <h4>Current Books in Library:</h4>
+                <ul>
+                    {% for book in books %}
+                        <li>{{ book.title }} by {{ book.author.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

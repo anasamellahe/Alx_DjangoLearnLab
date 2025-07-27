@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Member Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .dashboard { background-color: #f8f9fa; padding: 20px; border-radius: 5px; }
+        .header { color: #007bff; }
+        .nav { margin: 20px 0; }
+        .nav a { margin-right: 15px; color: #007bff; text-decoration: none; }
+        .nav a:hover { text-decoration: underline; }
+        .books-preview { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1 class="header">Member Dashboard</h1>
+        <p><strong>Welcome, {{ user.username }}!</strong></p>
+        <p>Role: <span style="color: #007bff;">{{ role }}</span></p>
+        <p>{{ message }}</p>
+        
+        <div class="nav">
+            <h3>Member Actions:</h3>
+            <a href="{% url 'book_list' %}">Browse Books</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+        
+        <div class="books-preview">
+            <h3>Welcome to the Library:</h3>
+            <p>As a member, you can:</p>
+            <ul>
+                <li>Browse available books</li>
+                <li>Search for specific titles</li>
+                <li>View book details</li>
+                <li>Contact librarians for assistance</li>
+            </ul>
+            
+            {% if books %}
+                <h4>Featured Books:</h4>
+                <ul>
+                    {% for book in books %}
+                        <li>{{ book.title }} by {{ book.author.name }}</li>
+                    {% endfor %}
+                </ul>
+                <p><a href="{% url 'book_list' %}">View all books →</a></p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
